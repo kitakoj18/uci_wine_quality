@@ -108,4 +108,15 @@ if __name__ == '__main__':
     plt.savefig('../images/features_vs_quality.png')
 
     #see distribution of quality ratings
-    
+    fig4 = plt.figure()
+    fig4.suptitle('Quality Rating Counts', fontweight = 'bold')
+    ax = fig4.add_subplot(1, 1, 1)
+    ax.set_xlabel('Quality Rating', fontweight = 'bold')
+    ax.set_ylabel('Quality Count', fontweight = 'bold')
+    #plt.show()
+    plt.savefig('../images/quality_rating_counts.png')
+
+
+    '''
+    Modeling
+    '''
