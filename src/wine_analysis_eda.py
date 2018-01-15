@@ -47,10 +47,6 @@ if __name__ == '__main__':
     #columns
     wine_cols = winedf.columns
 
-    '''
-    EDA
-    '''
-
     #make sure data imported correctly
     print(winedf.head())
 
