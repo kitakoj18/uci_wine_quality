@@ -113,6 +113,7 @@ if __name__ == '__main__':
     ax = fig4.add_subplot(1, 1, 1)
     ax.set_xlabel('Quality Rating', fontweight = 'bold')
     ax.set_ylabel('Quality Count', fontweight = 'bold')
+    winedf['quality'].value_counts().sort_index().plot(kind = 'bar')
     #plt.show()
     plt.savefig('../images/quality_rating_counts.png')
 
