@@ -54,18 +54,15 @@ if __name__ == '__main__':
     #make sure data imported correctly
     print(winedf.head())
 
-
     #check any null values
     print(winedf.info())
     #confirmed - clean dataset, no null values for any variables
-
 
     #correlation between variables
     fig1 = plt.figure(figsize = (15, 15))
     sns.heatmap(winedf.corr(), annot = True, linewidths = 0.5, cmap = 'Blues')
     #plt.show()
     plt.savefig('../images/correlations.png')
-
 
     #boxplots of each variable
     fig2 = plt.figure(figsize = (20, 10))
@@ -76,7 +73,6 @@ if __name__ == '__main__':
         sns.boxplot(x = winedf[wine_cols[i]])
     #plt.show()
     plt.savefig('../images/feature_boxplots.png')
-
 
     #look to see if outliers for each feature have similar response values
     #use outlier functions to get indices of outliers and their respective response variable values
@@ -116,8 +112,3 @@ if __name__ == '__main__':
     winedf['quality'].value_counts().sort_index().plot(kind = 'bar')
     #plt.show()
     plt.savefig('../images/quality_rating_counts.png')
-
-
-    '''
-    Modeling
-    '''
