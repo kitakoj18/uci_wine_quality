@@ -10,10 +10,11 @@ import seaborn as sns
 
 def get_outlier_ind(values, upper_outliers = True):
     '''
+    PARAMETERS:
     values(array): array of feature values to use to determine quartile ranges and outliers
     upper_outliers(bool): True to find only outliers above distribution, False to find below distribution
 
-    Returns array of indices where outliers are found for particular feature
+    RETURNS: array of indices where outliers are found for particular feature
     '''
 
     q1 = np.percentile(values, 25)
@@ -30,9 +31,11 @@ def get_outlier_ind(values, upper_outliers = True):
 
 def get_outlier_resp_values(resp_values, outlier_ind):
     '''
+    PARAMETERS:
     resp_values(array): array of response variable values
     outlier_ind(array): array of outlier indices
 
+    RETURNS:
     Returns response variable values of outliers
     '''
 
