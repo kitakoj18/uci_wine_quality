@@ -8,11 +8,11 @@
 5. [Gradient Boosting Results](gradient-boosting-classifier-results)
 6. [Conclusion](conclusion)
 
-## Introduction
+### Introduction
 
 This wine quality dataset comes from UC Irvine's Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/wine+quality). The purpose of this analysis is to determine if we can accurately predict the quality of wine based off some of its chemical properties such as pH and sugar levels. There are two separate datasets - one for red wine and the other for white - but only the red wine dataset is analyzed here.
 
-## EDA
+### EDA
 
 The chemical properties of the wines are all continuous variables.
 Quality ratings can range from 1 through 10, where lower values represent poorer quality, middle values represent normal quality, and higher values represent excellent quality. This dataset, however, only contains data with quality values from 3 through 8 and is unbalanced, with more data points in the normal quality value range as seen in Figure 1 below.
@@ -35,7 +35,7 @@ I explored the relationship between each feature and quality using the plots in 
 
 <img alt="Features vs. Quality" src="images/features_vs_quality.png">
 
-## Wine Quality Modeling
+### Wine Quality Modeling
 
 As stated, I have decided not to use a logistic regressor since the relationships between each of the predictor variables and quality appear to be more complex than a linear one. For this analysis, I looked at how well a relationship could be modeled by using a Random Forest Classifier and a Gradient Boosting Classifier. Although these two classifiers are complex algorithms, we can still determine which features are most important in modeling wine quality, given that we even find a relatively strong relationship between predictors and the response.
 
@@ -43,21 +43,22 @@ The data is split in train and test sets. The train set is then cross-validated 
 
 Here I am going to evaluate the classifiers based on their accuracy scores since we care about all the correct and incorrect predictions they make. I briefly discuss the effect of class imbalance in the conclusion.
 
-## Random Forest Classifier Results
+### Random Forest Classifier Results
 
 After finding the best parameters for the Random Forest classifier, the training accuracy is 68.64% and the accuracy calculated with the hold out test set is 68%. A rough sketch of the confusion matrix based on the test set is below.
 
-    3  [[  0   0   1   0   0   0]
- T  4   [  0   0   7   6   0   0]
- R  5   [  0   0 129  34   1   0]
- U  6   [  0   0  41 118  10   0]
- E  7   [  0   0   0  22  25   1]
-    8   [  0   0   0   0   5   0]]
-           3   4   5   6   7   8
-               PREDICTED
+    3    0   0   1   0   0   0
+ T  4    0   0   7   6   0   0
+ R  5    0   0 129  34   1   0
+ U  6    0   0  41 118  10   0
+ E  7    0   0   0  22  25   1
+    8    0   0   0   0   5   0
+
+         3   4   5   6   7   8
+              PREDICTED
 
 
-## Gradient Boosting Classifier Results
+### Gradient Boosting Classifier Results
 
 With the optimal parameters found by GridSearch, the training accuracy is 65.64% and the test accuracy is 65%. The confusion matrix is below.
 
@@ -70,10 +71,10 @@ With the optimal parameters found by GridSearch, the training accuracy is 65.64%
           3   4   5   6   7   8
                PREDICTED
 
-## Conclusion
+### Conclusion
 
 Unfortunately, there does not appear to be an accurate way to predict wine qualities based off their chemical properties. Because I was not able to reach an accuracy higher than 80%, I did not move forward with looking at feature importances.
 
 Of course here I only looked at two different classifiers so it might be worth trying some others to see if they perform better with this dataset.
 
-Also, using accuracy as an evaluation metric with an imbalanced dataset might be overstating the performance of the models. I looked at some analyses done by others on this dataset and they tended to modify and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance. I tried to use a different approach by using SMOTE to create synthetic data to cancel out the imbalance. However, my models were overfitting the train data and I still wasn't able to get a test accuracy score above 70%. The code implementing SMOTE is in the modeling script. 
+Also, using accuracy as an evaluation metric with an imbalanced dataset might be overstating the performance of the models. I looked at some analyses done by others on this dataset and they tended to modify and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance. I tried to use a different approach by using SMOTE to create synthetic data to cancel out the imbalance. However, my models were overfitting the train data and I still wasn't able to get a test accuracy score above 70%. The code implementing SMOTE is in the modeling script.
