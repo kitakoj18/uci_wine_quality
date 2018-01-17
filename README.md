@@ -47,16 +47,18 @@ Here I am going to evaluate the classifiers based on their accuracy scores since
 
 After finding the best parameters for the Random Forest classifier, the training accuracy is 68.64% and the accuracy calculated with the hold out test set is 68%. A rough sketch of the confusion matrix based on the test set is below.
 
-    3    0   0   1   0   0   0
- T  4    0   0   7   6   0   0
- R  5    0   0 129  34   1   0
- U  6    0   0  41 118  10   0
- E  7    0   0   0  22  25   1
-    8    0   0   0   0   5   0
-
-         3   4   5   6   7   8
-              PREDICTED
-
+|-------------------------------|
+|-------|     PREDICTED         |
+|-------------------------------|
+|---|---| 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|
+|   | 3 | 0 | 0   1 | 0 | 0 | 0 |
+| T | 4 | 0 | 0 | 7 | 6 | 0 | 0 |
+| R | 5 | 0 | 0 |129| 34| 1 | 0 |
+| U | 6 | 0 | 0 | 41|118| 10| 0 |
+| E | 7 | 0 | 0 | 0 | 22| 25| 1 |
+|   | 8 | 0 | 0 | 0 | 0 | 5 | 0 |
+|-------------------------------|
 
 ### Gradient Boosting Classifier Results
 
