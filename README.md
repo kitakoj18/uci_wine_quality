@@ -49,7 +49,7 @@ After finding the best parameters for the Random Forest classifier, the training
 
 |-------|     PREDICTED         |
 |-------|-----------------------|
-|-------| 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---| 3 | 4 | 5 | 6 | 7 | 8 |
 |---|---|---|---|---|---|---|---|
 |   | 3 | 0 | 0   1 | 0 | 0 | 0 |
 | T | 4 | 0 | 0 | 7 | 6 | 0 | 0 |
