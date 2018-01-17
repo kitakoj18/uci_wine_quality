@@ -4,9 +4,8 @@
 1. [Introduction](#introduction)
 2. [Exploratory Data Analysis](#eda)
 3. [Wine Quality Modeling](#wine-quality-modeling)
-4. [Random Forest Results](random-forest-classifier-results)
-5. [Gradient Boosting Results](gradient-boosting-classifier-results)
-6. [Conclusion](conclusion)
+4. [Model Results](random-forest-classifier-results)
+5. [Conclusion](conclusion)
 
 ### Introduction
 
@@ -43,34 +42,11 @@ The data is split in train and test sets. The train set is then cross-validated 
 
 Here I am going to evaluate the classifiers based on their accuracy scores since we care about all the correct and incorrect predictions they make. I briefly discuss the effect of class imbalance in the conclusion.
 
-### Random Forest Classifier Results
+### Classifier Results
 
-After finding the best parameters for the Random Forest classifier, the training accuracy is 68.64% and the accuracy calculated with the hold out test set is 68%. A rough sketch of the confusion matrix based on the test set is below.
+After finding the best parameters for the Random Forest classifier, the training accuracy is 68.64% and the accuracy calculated with the hold out test set is 68%. The training accuracy for the Gradient Boosting Classifier with the optimal parameters is 65.64% and the test accuracy is 65%.
 
-|-------|     PREDICTED         |
-|-------|-----------------------|
-|---|---| 3 | 4 | 5 | 6 | 7 | 8 |
-|---|---|---|---|---|---|---|---|
-|   | 3 | 0 | 0   1 | 0 | 0 | 0 |
-| T | 4 | 0 | 0 | 7 | 6 | 0 | 0 |
-| R | 5 | 0 | 0 |129| 34| 1 | 0 |
-| U | 6 | 0 | 0 | 41|118| 10| 0 |
-| E | 7 | 0 | 0 | 0 | 22| 25| 1 |
-|   | 8 | 0 | 0 | 0 | 0 | 5 | 0 |
-|-------------------------------|
-
-### Gradient Boosting Classifier Results
-
-With the optimal parameters found by GridSearch, the training accuracy is 65.64% and the test accuracy is 65%. The confusion matrix is below.
-
-    3 [[  0   0   1   0   0   0]
- T  4  [  0   1   8   4   0   0]
- R  5  [  1   0 123  39   1   0]
- U  6  [  0   2  33 115  16   3]
- E  7  [  0   0   0  25  21   2]
-    8  [  0   0   0   1   4   0]]
-          3   4   5   6   7   8
-               PREDICTED
+The confusion matrices show that a majority of quality ratings it predicted correctly are numbers in the normal wine quality range, which makes sense with the imbalanced data. Therefore, the models are making accurate predictions for average qualities but not for the extreme values. Again, I briefly talk about tackling class imbalance and model performance in the conclusion.  
 
 ### Conclusion
 
@@ -78,4 +54,4 @@ Unfortunately, there does not appear to be an accurate way to predict wine quali
 
 Of course here I only looked at two different classifiers so it might be worth trying some others to see if they perform better with this dataset.
 
-Also, using accuracy as an evaluation metric with an imbalanced dataset might be overstating the performance of the models. I looked at some analyses done by others on this dataset and they tended to modify and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance. I tried to use a different approach by using SMOTE to create synthetic data to cancel out the imbalance. However, my models were overfitting the train data and I still wasn't able to get a test accuracy score above 70%. The code implementing SMOTE is in the modeling script.
+Finally, I looked at some analyses done by others on this dataset and they tended to modify and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance. I tried to use a different approach by using SMOTE to create synthetic data to cancel out the imbalance. However, my models were overfitting the train data and I still wasn't able to get a test accuracy score above 70%. The code implementing SMOTE is in the modeling script.
