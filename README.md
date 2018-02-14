@@ -4,8 +4,9 @@
 1. [Introduction](#introduction)
 2. [Exploratory Data Analysis](#eda)
 3. [Wine Quality Modeling](#wine-quality-modeling)
-4. [Model Results](random-forest-classifier-results)
-5. [Conclusion](conclusion)
+4. [Model Results](#classifier-results)
+5. [Using SMOTE for Class Imbalance](#tackling-imbalance-with-smote)
+6. [Conclusion](#conclusion)
 
 ### Introduction
 
@@ -48,10 +49,19 @@ After finding the best parameters for the Random Forest classifier, the training
 
 The confusion matrices show that a majority of quality ratings it predicted correctly are numbers in the normal wine quality range, which makes sense with the imbalanced data. Therefore, the models are making accurate predictions for average qualities but not for the extreme values. Again, I briefly talk about tackling class imbalance and model performance in the conclusion.  
 
+### Tackling Imbalance with SMOTE
+
+We discovered there was a large class imbalance for extreme ratings so I wanted to see if we could improve our training by using Synthetic Minority Over-Sampling Technique (SMOTE) to create synthetic points that make up for the imbalance in the lower and higher rating classes.
+
+When I originally did this analysis, my models were overfitting the training data. There was overfitting because I created the train-test split and applied SMOTE to the train set. However, this presented a problem for the GridSearchCV because it was cross validating on whole set that had synthetic points. As a result, information in the validation sets was leaked into the individual training sets and the average accuracy was ballooned compared to the accuracy on the hold out test set.
+
+To solve this, I created a pipeline object to pass through GridSearch where the pipeline included the SMOTE and classifier objects. This change effectively addressed the overfitting problem I mentioned above; when GridSearchCV did the cross validations, SMOTE was only applied to the individual training sets and not on the hold out validation set so the mean accuracy score was correctly represented.
+
+Even though I was able to get SMOTE to work with GridSearchCV, I was not able to improve accuracy. In fact, the scores were lower to the ones when SMOTE was not applied. There just isn't enough data with the extreme ratings. The accuracy scores with SMOTE were lower because the models started categorizing points as extreme ratings that should have been classified as the average qualities (as shown in the confusion matrices). The models probably did this because the synthetic data points created by the very few points we have with extreme ratings have similar predictive feature values as the points with average ratings so the models were having trouble distinguishing between the two.
+
+
 ### Conclusion
 
-Unfortunately, there does not appear to be an accurate way to predict wine qualities based off their chemical properties. Because I was not able to reach an accuracy higher than 80%, I did not move forward with looking at feature importances.
+Unfortunately, there does not appear to be an accurate way to predict wine qualities based off their chemical properties. Because I was not able to reach an accuracy higher than 80%, I did not move forward with looking at feature importances. Of course here I only looked at two different classifiers so it might be worth trying some others to see if they perform better with this dataset.
 
-Of course here I only looked at two different classifiers so it might be worth trying some others to see if they perform better with this dataset.
-
-Finally, I looked at some analyses done by others on this dataset and they tended to modify and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance. I tried to use a different approach by using SMOTE to create synthetic data to cancel out the imbalance. However, my models were overfitting the train data and I still wasn't able to get a test accuracy score above 70%. The code implementing SMOTE is in the modeling script.
+Finally, I looked at some analyses done by others on this dataset and they tended to engineer and narrow the response variable to different quality levels such as 'bad', 'good', 'excellent' to handle the class imbalance so that is something to consider. I was curious to see what would happen with SMOTE.

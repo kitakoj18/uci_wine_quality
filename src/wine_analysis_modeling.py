@@ -7,6 +7,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline
 
 def get_opt_model(clf, param_grid, X_train, y_train, scoring = 'accuracy'):
     '''
@@ -21,7 +22,7 @@ def get_opt_model(clf, param_grid, X_train, y_train, scoring = 'accuracy'):
     RETURNS: fitted model (based on entire train set) with best parameter values
     '''
 
-    best_clf = GridSearchCV(clf, param_grid, scoring = 'accuracy', cv = 5, n_jobs = -1)
+    best_clf = GridSearchCV(clf, param_grid, scoring = scoring, cv = 5, n_jobs = -1)
     best_clf.fit(X_train, y_train)
     print(best_clf.best_score_)
     print(best_clf.best_params_)
@@ -61,13 +62,13 @@ if __name__ == '__main__':
     '''
     testing random forest classifier
     '''
-    rf = RandomForestClassifier()
-    rf_test_params = {'n_estimators': [30, 35, 40, 45, 50], 'max_depth': [15, 20, 25, 30, 35], \
-                'min_samples_leaf': [1, 5]}
-    best_rf = get_opt_model(rf, rf_test_params, X_train, y_train)
-    print_confusion_matrix(best_rf, X_test, y_test)
+    # rf = RandomForestClassifier()
+    # rf_test_params = {'n_estimators': [30, 35, 40, 45, 50], 'max_depth': [15, 20, 25, 30, 35], \
+    #             'min_samples_leaf': [1, 5]}
+    # best_rf = get_opt_model(rf, rf_test_params, X_train, y_train)
+    # print_confusion_matrix(best_rf, X_test, y_test)
 
-    #Training Accuracy: 0.686405337781
+    #CV Training Accuracy: 0.686405337781
     #
     # {'n_estimators': 40, 'max_depth': 25, 'min_samples_leaf': 1}
     #
@@ -85,13 +86,13 @@ if __name__ == '__main__':
     '''
     testing gradient boosting classifier
     '''
-    gb = GradientBoostingClassifier()
-    gb_test_params = {'n_estimators': [100, 500, 750], 'learning_rate': [.01, .05, .1, .2], \
-                    'min_samples_leaf': [1, 5, 7]}
-    best_gb = get_opt_model(gb, gb_test_params, X_train, y_train)
-    print_confusion_matrix(best_gb, X_test, y_test)
+    # gb = GradientBoostingClassifier()
+    # gb_test_params = {'n_estimators': [100, 500, 750], 'learning_rate': [.01, .05, .1, .2], \
+    #                 'min_samples_leaf': [1, 5, 7]}
+    # best_gb = get_opt_model(gb, gb_test_params, X_train, y_train)
+    # print_confusion_matrix(best_gb, X_test, y_test)
 
-    #Training Accuracy: 0.656380316931
+    #CV Training Accuracy: 0.656380316931
     #
     # {'n_estimators': 500, 'learning_rate': 0.05, 'min_samples_leaf': 5}
     #
@@ -107,36 +108,55 @@ if __name__ == '__main__':
     #
 
     '''
-    SMOTE analysis
+    SMOTE analysis - Random Forest
     '''
-    #smt = SMOTE()
-    #create synthetic data AFTER train-test split
-    # X_train_syn, y_train_syn = smt.fit_sample(X_train, y_train)
-    # print(np.bincount(y_train_syn))
-    #517 of each quality rating (3 through 8 only)
-
-    # fig1 = plt.figure()
-    # fig1.suptitle('Quality Rating Counts with SMOTE', fontweight = 'bold')
-    # ax = fig.add_subplot(1, 1, 1)
-    # ax.set_xlabel('quality rating')
-    # sns.countplot(y_syn)
-    # #plt.show()
-    # plt.savefig('../images/smote_dist.png')
-
+    # smt = SMOTE()
     # rf_syn = RandomForestClassifier()
-    # rf_syn_test_params = {'n_estimators': [35, 40, 45, 50], 'max_depth': [10, 15, 20, 25, 30], \
-    #             'min_samples_leaf': [1, 5]}
-    # best_syn_rf = get_opt_model(rf_syn, rf_syn_test_params, X_train_syn, y_train_syn)
+    #
+    # steps = [('smote', smt), ('rf', rf_syn)]
+    # pipeline = Pipeline(steps)
+    #
+    # rf_syn_test_params = {'rf__n_estimators': [35, 40, 45, 50], 'rf__max_depth': [10, 15, 20, 25, 30], \
+    #             'rf__min_samples_leaf': [1, 5]}
+    #
+    # best_syn_rf = get_opt_model(pipeline, rf_syn_test_params, X_train, y_train)
     # print_confusion_matrix(best_syn_rf, X_test, y_test)
 
-    #Train Accuracy: 0.869116698904
-    #Test Accuracy: 0.6475
+    #CV Training Accuracy: 0.633861551293
+    #
+    # {'rf__max_depth': 20, 'rf__min_samples_leaf': 1, 'rf__n_estimators': 50}
+    #
+    #Test Accuracy: 0.62
+    # [[  0   1   0   0   0   0]
+    #  [  1   2   5   4   1   0]
+    #  [  4  15 109  31   5   0]
+    #  [  0   7  32 102  23   5]
+    #  [  0   1   0  11  34   2]
+    #  [  0   0   0   0   4   1]]
 
-    # gb_syn = GradientBoostingClassifier()
-    # gb_syn_test_params = {'n_estimators': [500, 750, 1000], 'learning_rate': [.01, .05, .1, .2, .5], \
-    #                 'min_samples_leaf': [1, 5, 7]}
-    # best_syn_gb = get_opt_model(gb_syn, gb_syn_test_params, X_train_sc_syn, y_train_syn)
-    # print_confusion_matrix(best_syn_gb, X_test_sc_syn, y_test)
+    '''
+    SMOTE analysis - Gradient Boosting
+    '''
+    smt = SMOTE()
+    gb_syn = GradientBoostingClassifier()
+    gb_syn_test_params = {'gb__n_estimators': [500, 750, 1000], 'gb__learning_rate': [.01, .05, .1, .2, .5], \
+                     'gb__min_samples_leaf': [1, 5, 7]}
 
-    #Train Accuracy:
-    #Test Accuracy:
+    steps2 = [('smote', smt), ('gb', gb_syn)]
+    pipeline2 = Pipeline(steps2)
+
+    best_syn_gb = get_opt_model(pipeline2, gb_syn_test_params, X_train, y_train)
+    print_confusion_matrix(best_syn_gb, X_test, y_test)
+
+    #CV Train Accuracy: 0.610508757298
+    #
+    # {'gb__learning_rate': 0.05, 'gb__min_samples_leaf': 7, 'gb__n_estimators': 1000}
+    #
+    #Test Accuracy: 0.6275
+    #
+    # [[  0   0   1   0   0   0]
+    #  [  1   1   5   5   1   0]
+    #  [  3   8 109  41   3   0]
+    #  [  0   3  32 111  20   3]
+    #  [  0   1   0  14  29   4]
+    #  [  0   0   0   1   3   1]]
